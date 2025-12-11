@@ -21,7 +21,7 @@ UHostServerWidget::UHostServerWidget(const FObjectInitializer& ObjectInitializer
 	: Super(ObjectInitializer)
 {
 	ConstructorHelpers::FClassFinder<UUserWidget> MapRowBPClass(TEXT("/Game/UI/WB_MapRow"));
-	if (MapRowBPClass.Class == nullptr)
+	if (IsValid(MapRowBPClass.Class) == false)
 	{
 		return;
 	}
@@ -100,7 +100,7 @@ void UHostServerWidget::SetUp(UMainWidget* NewParent)
 
 void UHostServerWidget::OnClickHost()
 {
-	if (Parent == nullptr)
+	if (IsValid(Parent) == false)
 	{
 		return;
 	}
@@ -147,14 +147,14 @@ void UHostServerWidget::OnClickBack()
 void UHostServerWidget::SetMapList()
 {
 	UWorld* World = GetWorld();
-	if (World == nullptr)
+	if (IsValid(World) == false)
 	{
 		return;
 	}
 
 	// GameInstance를 캐스팅하고 null인지 확인하여 안정성을 높입니다.
 	UKFLikeGameInstance* GameInstance = Cast<UKFLikeGameInstance>(GetGameInstance());
-	if (GameInstance == nullptr)
+	if (IsValid(GameInstance) == false)
 	{
 		return;
 	}
@@ -172,7 +172,7 @@ void UHostServerWidget::SetMapList()
 	for (const FMapData& ServerData : *MapDataArray)
 	{
 		UMapRowWidget* Row = CreateWidget<UMapRowWidget>(World, MapRowClass);
-		if (Row == nullptr)
+		if (IsValid(Row) == false)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Failed to create MapRowWidget."));
 			continue; // 하나의 행이 실패하더라도 계속 진행합니다.
@@ -211,7 +211,7 @@ void UHostServerWidget::UpdateChildren()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("UpdateChildren"));
 		UMapRowWidget* Row = Cast<UMapRowWidget>(MapList->GetChildAt(i));
-		if (Row == nullptr)
+		if (IsValid(Row) == false)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Error"));
 			continue;

@@ -27,7 +27,7 @@ void AShopTriggerBox::NotifyActorBeginOverlap(AActor* OtherActor)
 	}
 
 	AKillingFloorLikeCharacter* KFCharacter = Cast<AKillingFloorLikeCharacter>(OtherActor);
-	if (KFCharacter == nullptr)
+	if (IsValid(KFCharacter) == false)
 	{
 		return;
 	}
@@ -55,7 +55,7 @@ void AShopTriggerBox::NotifyActorEndOverlap(AActor* OtherActor)
 	}
 
 	AKillingFloorLikeCharacter* KFCharacter = Cast<AKillingFloorLikeCharacter>(OtherActor);
-	if (KFCharacter == nullptr)
+	if (IsValid(KFCharacter) == false)
 	{
 		return;
 	}

@@ -22,7 +22,7 @@ public:
 	bool IsPooling;
 	void SetIsPooling(bool NewIsPooling)
 	{
-		if (GetOwner() != nullptr && GetOwner()->HasAuthority())
+		if (IsValid(GetOwner()) && GetOwner()->HasAuthority())
 		{
 			IsPooling = NewIsPooling;
 			OnRep_IsPooling();

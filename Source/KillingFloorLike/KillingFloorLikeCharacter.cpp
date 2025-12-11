@@ -289,7 +289,7 @@ void AKillingFloorLikeCharacter::Client_OnSpecialOrShopStarted_Implementation()
 
 	UShopWidget* ShopInstance = Cast<UShopWidget>(
 		PlayerCharacterController->GetKillingFloorHud()->GetWbShopInstance());
-	if (ShopInstance == nullptr)
+	if (IsValid(ShopInstance) == false)
 	{
 		return;
 	}
@@ -386,7 +386,7 @@ ABaseWeapon* AKillingFloorLikeCharacter::GetWeapon(EWeaponType WeaponType)
 {
 	for (auto Weapon : WeaponInventory)
 	{
-		if (Weapon != nullptr && Weapon->GetWeaponType() == WeaponType)
+		if (IsValid(Weapon) && Weapon->GetWeaponType() == WeaponType)
 		{
 			return Weapon;
 		}
@@ -502,7 +502,7 @@ float AKillingFloorLikeCharacter::GetDiscountRate(EPerkType WeaponPerkType)
 
 bool AKillingFloorLikeCharacter::IsBuyable(const FWeaponData& WeaponData)
 {
-	if (GetWeapon(WeaponData.type) != nullptr)
+	if (IsValid(GetWeapon(WeaponData.type)))
 	{
 		return false;
 	}
@@ -611,12 +611,12 @@ void AKillingFloorLikeCharacter::Server_ChangePerk_Implementation(EPerkType Type
 
 void AKillingFloorLikeCharacter::Server_BuyWeaponMag_Implementation(ABaseWeapon* Weapon)
 {
-	if (Weapon == nullptr)
+	if (IsValid(Weapon) == false)
 	{
 		return;
 	}
 	AConsumableWeapon* ConsumableWeapon = Cast<AConsumableWeapon>(Weapon);
-	if (ConsumableWeapon == nullptr)
+	if (IsValid(ConsumableWeapon) == false)
 	{
 		return;
 	}
@@ -658,7 +658,7 @@ void AKillingFloorLikeCharacter::Server_BuyArmor_Implementation()
 
 UKFLikeGameInstance* AKillingFloorLikeCharacter::GetKFLikeGameInstance()
 {
-	if (GameInstance == nullptr)
+	if (IsValid(GameInstance) == false)
 	{
 		GameInstance = Cast<UKFLikeGameInstance>(GetGameInstance());
 	}
@@ -675,7 +675,7 @@ void AKillingFloorLikeCharacter::CheckAllWeaponsReadyAndProcess()
 	bool bAllWeaponsValid = true;
 	for (ABaseWeapon* Weapon : WeaponInventory)
 	{
-		if (Weapon == nullptr) // 아직 NULL인 포인터가 있다면
+		if (IsValid(Weapon) == false) // 아직 NULL인 포인터가 있다면
 		{
 			bAllWeaponsValid = false;
 			break;
@@ -755,7 +755,7 @@ void AKillingFloorLikeCharacter::Move(const FInputActionValue& Value)
 		return;
 	}
 
-	if (Controller != nullptr)
+	if (IsValid(Controller))
 	{
 		// add movement 
 		AddMovementInput(GetActorForwardVector(), MovementVector.Y);
@@ -773,7 +773,7 @@ void AKillingFloorLikeCharacter::Look(const FInputActionValue& Value)
 		return;
 	}
 
-	if (Controller != nullptr)
+	if (IsValid(Controller))
 	{
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
@@ -784,7 +784,7 @@ void AKillingFloorLikeCharacter::Look(const FInputActionValue& Value)
 void AKillingFloorLikeCharacter::Server_CheckChangableAimType_Implementation()
 {
 	ABaseWeapon* Weapon = GetCurrentWeapon();
-	if (Weapon == nullptr || Weapon->IsAimTypeChangeable() == false)
+	if (IsValid(Weapon) == false || Weapon->IsAimTypeChangeable() == false)
 	{
 		return;
 	}
@@ -793,7 +793,7 @@ void AKillingFloorLikeCharacter::Server_CheckChangableAimType_Implementation()
 
 void AKillingFloorLikeCharacter::Multi_ChangeAimType_Implementation()
 {
-	if (GetMesh1P() != nullptr && GetMesh1P()->GetAnimInstance() != nullptr)
+	if (IsValid(GetMesh1P()) && IsValid(GetMesh1P()->GetAnimInstance()))
 	{
 		GetMesh1P()->GetAnimInstance()->Montage_Stop(0.2f);
 		GetMesh()->GetAnimInstance()->Montage_Stop(0.2f);
@@ -813,7 +813,7 @@ void AKillingFloorLikeCharacter::Server_ReloadWeapon_Implementation()
 
 	ARangeWeapon* CurWeapon = Cast<ARangeWeapon>(GetCurrentWeapon());
 
-	if (CurWeapon == nullptr || CurWeapon->IsReloadable() == false)
+	if (IsValid(CurWeapon) == false || CurWeapon->IsReloadable() == false)
 	{
 		return;
 	}
@@ -829,18 +829,18 @@ void AKillingFloorLikeCharacter::Multi_ReloadWeaponCallback_Implementation()
 {
 	ABaseWeapon* CurWeapon = GetCurrentWeapon();
 
-	if (CurWeapon == nullptr)
+	if (IsValid(CurWeapon) == false)
 	{
 		return;
 	}
 	
 	UAnimMontage* ReloadMontage = CurWeapon->GetWeaponMontage(EWeaponAnimationType::Reload);
-	if (ReloadMontage == nullptr)
+	if (IsValid(ReloadMontage) == false)
 	{
 		return;
 	}
 	UAnimInstance* AnimInstance = GetMesh1P()->GetAnimInstance();
-	if (AnimInstance == nullptr || AnimInstance->Montage_IsPlaying(ReloadMontage))
+	if (IsValid(AnimInstance) == false || AnimInstance->Montage_IsPlaying(ReloadMontage))
 	{
 		return;
 	}
@@ -848,12 +848,12 @@ void AKillingFloorLikeCharacter::Multi_ReloadWeaponCallback_Implementation()
 	AnimInstance->Montage_Play(ReloadMontage, GetReloadRate(GetCurrentWeapon()));
 
 	UAnimMontage* PlayerReloadMontage = CurWeapon->GetPlayerAnimation(EWeaponAnimationType::Reload);
-	if (PlayerReloadMontage == nullptr)
+	if (IsValid(PlayerReloadMontage) == false)
 	{
 		return;
 	}
 
-	if (PlayerAnimInstance == nullptr || PlayerAnimInstance->Montage_IsPlaying(PlayerReloadMontage))
+	if (IsValid(PlayerAnimInstance) == false || PlayerAnimInstance->Montage_IsPlaying(PlayerReloadMontage))
 	{
 		return;
 	}
@@ -873,7 +873,7 @@ void AKillingFloorLikeCharacter::Server_DropWeapon_Implementation(ABaseWeapon* D
 		return;
 	}
 
-	if (DropWeapon == nullptr)
+	if (IsValid(DropWeapon) == false)
 	{
 		return;
 	}
@@ -894,7 +894,7 @@ void AKillingFloorLikeCharacter::Server_DropWeapon_Implementation(ABaseWeapon* D
 
 void AKillingFloorLikeCharacter::Server_SellWeapon_Implementation(EWeaponType WeaponType)
 {
-	if (GetWeapon(WeaponType) == nullptr)
+	if (IsValid(GetWeapon(WeaponType)) == false)
 	{
 		return;
 	}
@@ -918,7 +918,7 @@ void AKillingFloorLikeCharacter::Server_SellWeapon_Implementation(EWeaponType We
 void AKillingFloorLikeCharacter::Server_UseGrenade_Implementation()
 {
 	ABaseWeapon* GrenadeWeapon = GetWeapon(EWeaponType::Grenade);
-	if (GrenadeWeapon == nullptr)
+	if (IsValid(GrenadeWeapon) == false)
 	{
 		return;
 	}
@@ -1052,13 +1052,13 @@ void AKillingFloorLikeCharacter::Server_SwapWeaponCheck_Implementation(int32 Act
 	}
 
 	ABaseWeapon* CurWeapon = GetCurrentWeapon();
-	if (CurWeapon == nullptr)
+	if (IsValid(CurWeapon) == false)
 	{
 		return;
 	}
 
 	UAnimMontage* AnimMontage = CurWeapon->GetWeaponMontage(EWeaponAnimationType::PutDown);
-	if (AnimMontage == nullptr)
+	if (IsValid(AnimMontage) == false)
 	{
 		return;
 	}
@@ -1080,22 +1080,22 @@ EWeaponType AKillingFloorLikeCharacter::IsSwapWeaponable(int32 ActionValue)
 		return EWeaponType::None;
 	}
 
-	if (ActionValue == 1 && GetWeapon(EWeaponType::Main) != nullptr && CurrentWeapon->GetWeaponType() !=
+	if (ActionValue == 1 && IsValid(GetWeapon(EWeaponType::Main)) && CurrentWeapon->GetWeaponType() !=
 		EWeaponType::Main)
 	{
 		return EWeaponType::Main;
 	}
-	else if (ActionValue == 2 && GetWeapon(EWeaponType::Sub) != nullptr && CurrentWeapon->GetWeaponType() !=
+	else if (ActionValue == 2 && IsValid(GetWeapon(EWeaponType::Sub)) && CurrentWeapon->GetWeaponType() !=
 		EWeaponType::Sub)
 	{
 		return EWeaponType::Sub;
 	}
-	else if (ActionValue == 3 && GetWeapon(EWeaponType::Knife) != nullptr && CurrentWeapon->GetWeaponType() !=
+	else if (ActionValue == 3 && IsValid(GetWeapon(EWeaponType::Knife)) && CurrentWeapon->GetWeaponType() !=
 		EWeaponType::Knife)
 	{
 		return EWeaponType::Knife;
 	}
-	else if (ActionValue == 4 && GetWeapon(EWeaponType::Syringe) != nullptr && CurrentWeapon->GetWeaponType() !=
+	else if (ActionValue == 4 && IsValid(GetWeapon(EWeaponType::Syringe)) && CurrentWeapon->GetWeaponType() !=
 		EWeaponType::Syringe)
 	{
 		return EWeaponType::Syringe;
@@ -1110,19 +1110,19 @@ EWeaponType AKillingFloorLikeCharacter::IsSwapWeaponable(int32 ActionValue)
 void AKillingFloorLikeCharacter::Server_SwapWeapon_Implementation(ABaseWeapon* NewWeapon)
 {
 	ABaseWeapon* CurWeapon = GetCurrentWeapon();
-	if (CurWeapon == nullptr)
+	if (IsValid(CurWeapon) == false)
 	{
 		return;
 	}
 	
 	UAnimMontage* AnimMontage = CurWeapon->GetWeaponMontage(EWeaponAnimationType::PutDown);
-	if (AnimMontage == nullptr)
+	if (IsValid(AnimMontage) == false)
 	{
 		return;
 	}
 
 	UAnimInstance* AnimInstance = GetMesh1P()->GetAnimInstance();
-	if (AnimInstance == nullptr)
+	if (IsValid(AnimInstance) == false)
 	{
 		return;
 	}
@@ -1136,7 +1136,7 @@ void AKillingFloorLikeCharacter::Multi_PlayPutDownAnimation_Implementation(
 	ABaseWeapon* NewWeapon, UAnimMontage* AnimMontage)
 {
 	UAnimInstance* AnimInstance = GetMesh1P()->GetAnimInstance();
-	if (AnimInstance == nullptr)
+	if (IsValid(AnimInstance) == false)
 	{
 		return;
 	}
@@ -1163,7 +1163,7 @@ void AKillingFloorLikeCharacter::OnPutDownMontageEnded(bool bInterrupted,
 		return;
 	}
 
-	if (bInterrupted || NewWeapon == nullptr)
+	if (bInterrupted || IsValid(NewWeapon) == false)
 	{
 		return;
 	}
@@ -1188,7 +1188,7 @@ void AKillingFloorLikeCharacter::OnPutDownMontageEnded(bool bInterrupted,
 
 void AKillingFloorLikeCharacter::Multi_OnPutDownMontageEndedCallback_Implementation()
 {
-	if (GetCurrentWeapon() == nullptr)
+	if (IsValid(GetCurrentWeapon()) == false)
 	{
 		return;
 	}
@@ -1209,7 +1209,7 @@ void AKillingFloorLikeCharacter::Server_CheckPlayWeaponAnim_Implementation(
 	UAnimMontage* WeaponMontage, UAnimMontage* PlayerMontage, bool IsStopPlayingMontage, float PlayRate)
 {
 	// 1. 유효성 검사: 재생할 애니메이션이 하나도 없으면 아무것도 하지 않습니다.
-	if (WeaponMontage == nullptr && PlayerMontage == nullptr)
+	if (IsValid(WeaponMontage) == false && IsValid(PlayerMontage) == false)
 	{
 		return;
 	}
@@ -1308,7 +1308,7 @@ void AKillingFloorLikeCharacter::Server_PickUpWeapon_Implementation(ABaseWeapon*
 		return;
 	}
 
-	if (NewWeapon == nullptr)
+	if (IsValid(NewWeapon) == false)
 	{
 		return;
 	}
@@ -1321,7 +1321,7 @@ void AKillingFloorLikeCharacter::Server_PickUpWeapon_Implementation(ABaseWeapon*
 	AddWeaponInventory(NewWeapon);
 
 	//첫 무기 획득하면 그냥 바로 CurrentWeapon = NewWeapon
-	if (GetCurrentWeapon() == nullptr)
+	if (IsValid(GetCurrentWeapon()) == false)
 	{
 		SetCurrentWeapon(NewWeapon);
 		return;
@@ -1338,7 +1338,7 @@ void AKillingFloorLikeCharacter::Server_PickUpWeapon_Implementation(ABaseWeapon*
 
 void AKillingFloorLikeCharacter::SwapWeaponCallback(ABaseWeapon* Weapon)
 {
-	if (Weapon == nullptr)
+	if (IsValid(Weapon) == false)
 	{
 		return;
 	}
@@ -1445,7 +1445,7 @@ void AKillingFloorLikeCharacter::Client_PlayHitEffect_Implementation(FDamageEven
 
 void AKillingFloorLikeCharacter::OnRep_IsIron()
 {
-	if (IsLocallyControlled() && GetMesh1P() != nullptr && GetMesh1P()->GetAnimInstance() != nullptr)
+	if (IsLocallyControlled() && IsValid(GetMesh1P()) && IsValid(GetMesh1P()->GetAnimInstance()))
 	{
 		EventChangeFov(GetIsIron());
 	}

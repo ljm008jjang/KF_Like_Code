@@ -442,7 +442,7 @@ void ABaseCharacter::Multi_PlaySoundBase_Implementation(EMonsterSoundType SoundT
 
 void ABaseCharacter::Multi_PlayCharacterAnim_Implementation(UAnimMontage* SelectMontage, bool IsStopOtherMontage)
 {
-	if (GetMesh() == nullptr || GetMesh()->GetAnimInstance() == nullptr || SelectMontage == nullptr)
+	if (IsValid(GetMesh()) == false || IsValid(GetMesh()->GetAnimInstance()) == false || IsValid(SelectMontage) == false)
 	{
 		return;
 	}

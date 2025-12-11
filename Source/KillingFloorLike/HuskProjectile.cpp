@@ -65,7 +65,7 @@ void AHuskProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
                             UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	const ABaseCharacter* ShooterInstigator = Cast<ABaseCharacter>(GetInstigator());
-	if (ShooterInstigator == nullptr)
+	if (IsValid(ShooterInstigator) == false)
 	{
 		return;
 	}
@@ -123,7 +123,7 @@ void AHuskProjectile::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor
                                      const FHitResult& SweepResult)
 {
 	const ABaseCharacter* ShooterInstigator = Cast<ABaseCharacter>(GetInstigator());
-	if (ShooterInstigator == nullptr)
+	if (IsValid(ShooterInstigator) == false)
 	{
 		return;
 	}

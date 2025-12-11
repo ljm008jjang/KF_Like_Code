@@ -31,7 +31,7 @@ void UUnitIsAlive::RunTest(FEnvQueryInstance& QueryInstance) const
 		// 쿼리 아이템에서 액터를 가져옵니다.
 		// Get the actor from the query item.
 		AActor* ItemActor = GetItemActor(QueryInstance, It.GetIndex());
-		if (ItemActor == nullptr)
+		if (IsValid(ItemActor) == false)
 		{
 			continue; // 액터가 없으면 다음으로 넘어갑니다.
 			// If there is no actor, move on to the next one.

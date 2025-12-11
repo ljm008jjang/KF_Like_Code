@@ -13,7 +13,7 @@ void UWeaponAnimInstance::NativeInitializeAnimation()
 
 bool UWeaponAnimInstance::GetCharacterIsIron()
 {
-	if (KFCharacter == nullptr)
+	if (IsValid(KFCharacter) == false)
 	{
 		return false;
 	}

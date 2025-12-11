@@ -23,7 +23,7 @@ void AConsumableWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 void AConsumableWeapon::OnRep_Ammo()
 {
-	if (Character == nullptr)
+	if (IsValid(Character) == false)
 	{
 		return;
 	}
@@ -74,7 +74,7 @@ void AConsumableWeapon::AddAmmo(int AddAmmoAmount)
 int32 AConsumableWeapon::GetAmmoFillCost()
 {
 	// 방어적 체크
-	if (Character == nullptr)
+	if (IsValid(Character) == false)
 	{
 		return 0;
 	}

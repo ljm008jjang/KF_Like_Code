@@ -27,7 +27,7 @@ void UShopQuickPerkSelectWidget::Init(EPerkType NewPerkType, AKillingFloorLikeCh
 
 	UResourceManager* ResourceManager = GetGameInstance()->GetSubsystem<UResourceManager>();
 	
-	if (ResourceManager == nullptr)
+	if (IsValid(ResourceManager) == false)
 	{
 		return;
 	}
@@ -37,7 +37,7 @@ void UShopQuickPerkSelectWidget::Init(EPerkType NewPerkType, AKillingFloorLikeCh
 
 void UShopQuickPerkSelectWidget::OnButtonClicked()
 {
-	if (KFCharacter == nullptr)
+	if (IsValid(KFCharacter) == false)
 	{
 		return;
 	}

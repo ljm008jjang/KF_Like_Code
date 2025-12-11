@@ -16,13 +16,13 @@ void UTP_PickUpComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// Register our Overlap Event
-	if (GetOwner() == nullptr)
+	if (IsValid(GetOwner()) == false)
 	{
 		return;
 	}
 	AActor* Actor = Cast<AActor>(GetOwner());
 	//Character가 있다는건 어떤 캐릭터에게 소유되었음. 설정 필요 X
-	if (Actor != nullptr && Actor->HasAuthority())
+	if (IsValid(Actor) && Actor->HasAuthority())
 	{
 		OnComponentBeginOverlap.AddDynamic(this, &UTP_PickUpComponent::OnSphereBeginOverlap);
 		//OnDrop.AddDynamic(this, &UTP_PickUpComponent::AfterDrop);
@@ -36,7 +36,7 @@ void UTP_PickUpComponent::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedCo
 	// Checking if it is a First Person Character overlapping
 	AKillingFloorLikeCharacter* Character = Cast<AKillingFloorLikeCharacter>(OtherActor);
 
-	if (Character == nullptr || Character->HasAuthority() == false)
+	if (IsValid(Character) == false || Character->HasAuthority() == false)
 	{
 		return;
 	}

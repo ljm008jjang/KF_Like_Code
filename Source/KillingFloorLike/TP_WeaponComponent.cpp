@@ -21,16 +21,16 @@ UTP_WeaponComponent::UTP_WeaponComponent()
 
 void UTP_WeaponComponent::Fire()
 {
-	if (Character == nullptr || Character->GetController() == nullptr)
+	if (IsValid(Character) == false || IsValid(Character->GetController()) == false)
 	{
 		return;
 	}
 
 	// Try and fire a projectile
-	if (ProjectileClass != nullptr)
+	if (IsValid(ProjectileClass))
 	{
 		UWorld* const World = GetWorld();
-		if (World != nullptr)
+		if (IsValid(World))
 		{
 			APlayerController* PlayerController = Cast<APlayerController>(Character->GetController());
 			const FRotator SpawnRotation = PlayerController->PlayerCameraManager->GetCameraRotation();
@@ -58,7 +58,7 @@ void UTP_WeaponComponent::Fire()
 	}
 
 	// Try and play the sound if specified
-	if (FireSound != nullptr)
+	if (IsValid(FireSound))
 	{
 		UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<USoundManager>()->Multi_Play3DSound(
 			FireSound, Character->GetActorLocation());
@@ -66,11 +66,11 @@ void UTP_WeaponComponent::Fire()
 	}
 
 	// Try and play a firing animation if specified
-	if (FireAnimation != nullptr)
+	if (IsValid(FireAnimation))
 	{
 		// Get the animation object for the arms mesh
 		UAnimInstance* AnimInstance = Character->GetMesh1P()->GetAnimInstance();
-		if (AnimInstance != nullptr)
+		if (IsValid(AnimInstance))
 		{
 			AnimInstance->Montage_Play(FireAnimation, 1.f);
 		}
@@ -85,7 +85,7 @@ EWeaponType UTP_WeaponComponent::GetWeaponType()
 void UTP_WeaponComponent::AttachWeapon(AKillingFloorLikeCharacter* TargetCharacter)
 {
 	Character = TargetCharacter;
-	if (Character == nullptr)
+	if (IsValid(Character) == false)
 	{
 		return;
 	}
@@ -106,7 +106,7 @@ void UTP_WeaponComponent::AttachWeapon(AKillingFloorLikeCharacter* TargetCharact
 
 void UTP_WeaponComponent::DropWeapon(AKillingFloorLikeCharacter* TargetCharacter)
 {
-	if (Character == nullptr)
+	if (IsValid(Character) == false)
 	{
 		return;
 	}
@@ -120,7 +120,7 @@ void UTP_WeaponComponent::DropWeapon(AKillingFloorLikeCharacter* TargetCharacter
 
 void UTP_WeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	if (Character == nullptr)
+	if (IsValid(Character) == false)
 	{
 		return;
 	}

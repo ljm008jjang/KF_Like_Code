@@ -66,10 +66,13 @@ bool URaycastShootingComponent::Fire(AKillingFloorLikeCharacter* Character, FWea
 
 bool URaycastShootingComponent::GetTraceStartEnd(const AKillingFloorLikeCharacter* Character, FVector& OutStart, FVector& OutEnd) const
 {
-	if (!Character) return false;
+	if (IsValid(Character) == false || IsValid(Character->GetInstigatorController()) == false)
+	{
+		return false;
+	}
 
 	const APlayerController* PlayerController = Cast<APlayerController>(Character->GetInstigatorController());
-	if (!PlayerController || !PlayerController->PlayerCameraManager)
+	if (IsValid(PlayerController) == false || IsValid(PlayerController->PlayerCameraManager) == false)
 	{
 		return false;
 	}

@@ -11,7 +11,7 @@ void UShopPerkImageWidget::RefreshShopPerkImage(EPerkType PerkType)
 {
 	UResourceManager* ResourceManager = GetGameInstance()->GetSubsystem<UResourceManager>();
 	
-	if (ResourceManager == nullptr)
+	if (IsValid(ResourceManager) == false)
 	{
 		return;
 	}

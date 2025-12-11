@@ -49,7 +49,7 @@ USoundBase* UResourceManager::LoadSound(const FString& AssetPath)
 		return nullptr;
 	}
 	USoundBase* Sound = Cast<USoundBase>(Asset);
-	if (!Sound)
+	if (IsValid(Sound) == false)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to cast asset to USoundBase. AssetPath: %s"), *AssetPath);
 	}
@@ -65,7 +65,7 @@ UNiagaraSystem* UResourceManager::LoadEffect(const FString& AssetPath)
 		return nullptr;
 	}
 	UNiagaraSystem* NiagaraSystem = Cast<UNiagaraSystem>(Asset);
-	if (!NiagaraSystem)
+	if (IsValid(NiagaraSystem) == false)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to cast asset to UNiagaraSystem. AssetPath: %s"), *AssetPath);
 	}

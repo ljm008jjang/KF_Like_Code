@@ -40,16 +40,16 @@ void UWeaponFleshComponent::TickComponent(float DeltaTime, enum ELevelTick TickT
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (FleshLight == nullptr || FleshLight->IsVisible() == false)
+	if (IsValid(FleshLight) == false || FleshLight->IsVisible() == false)
 	{
 		return;
 	}
 
 	ABaseWeapon* BaseWeapon = Cast<ABaseWeapon>(GetOwner());
-	if (BaseWeapon == nullptr || BaseWeapon->GetCharacter() == nullptr || BaseWeapon->GetCharacter()->
-		GetPlayerCharacterController() == nullptr || BaseWeapon->GetCharacter()->
-		                                                         GetPlayerCharacterController()->PlayerCameraManager ==
-		nullptr)
+	if (IsValid(BaseWeapon) == false || IsValid(BaseWeapon->GetCharacter()) == false || IsValid(BaseWeapon->GetCharacter()->
+		GetPlayerCharacterController()) == false || IsValid(BaseWeapon->GetCharacter()->
+		                                                         GetPlayerCharacterController()->PlayerCameraManager) ==
+		false)
 	{
 		return;
 	}

@@ -14,13 +14,13 @@ class UPubSubManager;
 
 bool USyringeShootingComponent::Fire(AKillingFloorLikeCharacter* Character, FWeaponData* WeaponData, bool IsSpecial)
 {
-	if (!Character || !Character->GetController())
+	if (IsValid(Character) == false || IsValid(Character->GetController()) == false)
 	{
 		return false;
 	}
 
 	APlayerController* PlayerController = Cast<APlayerController>(Character->GetInstigatorController());
-	if (!PlayerController)
+	if (IsValid(PlayerController) == false)
 	{
 		return false;
 	}
@@ -72,7 +72,7 @@ bool USyringeShootingComponent::Fire(AKillingFloorLikeCharacter* Character, FWea
 			AKillingFloorLikeCharacter* HitPlayer = Cast<AKillingFloorLikeCharacter>(Result.GetActor());
 			
 			// 유효한 아군 캐릭터가 아니거나, 자기 자신을 쏘려고 하면 무시합니다.
-			if (!HitPlayer || HitPlayer == Character)
+			if (IsValid(HitPlayer) == false || HitPlayer == Character)
 			{
 				continue;
 			}

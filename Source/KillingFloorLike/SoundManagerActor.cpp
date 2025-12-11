@@ -21,7 +21,7 @@ void ASoundManagerActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (!BGMAudioComponent)
+	if (IsValid(BGMAudioComponent) == false)
 	{
 		BGMAudioComponent = NewObject<UAudioComponent>(this);
 		BGMAudioComponent->bAutoActivate = false; // 자동재생 끔
@@ -44,7 +44,7 @@ void ASoundManagerActor::Multi_Play3DSound_Implementation(USoundBase* Sound, FVe
 
 void ASoundManagerActor::Multi_ChangeBGM_Implementation(const FString& AssetPath)
 {
-	if (BGMAudioComponent == nullptr)
+	if (IsValid(BGMAudioComponent) == false)
 	{
 		return;
 	}

@@ -6,7 +6,7 @@
 void UCSVCustomDataTable::SaveStructData(FStructuredArchiveSlot Slot)
 {
 	UScriptStruct* SaveUsingStruct = RowStruct;
-	if (!SaveUsingStruct)
+	if (IsValid(SaveUsingStruct) == false)
 	{
 		if (!HasAnyFlags(RF_ClassDefaultObject) && GetOutermost() != GetTransientPackage())
 		{

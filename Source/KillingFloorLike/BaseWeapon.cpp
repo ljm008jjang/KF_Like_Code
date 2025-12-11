@@ -98,7 +98,7 @@ void ABaseWeapon::FireWeapon(bool IsSpecial)
 bool ABaseWeapon::CheckFireWeapon(bool IsSpecial)
 {
 	bool result = false;
-	if (Character == nullptr || Character->GetController() == nullptr)
+	if (IsValid(Character) == false || IsValid(Character->GetController()) == false)
 	{
 		return false;
 	}
@@ -118,7 +118,7 @@ bool ABaseWeapon::CheckFireWeapon(bool IsSpecial)
 
 void ABaseWeapon::Multi_FireWeaponCallback_Implementation()
 {
-	if (Character == nullptr)
+	if (IsValid(Character) == false)
 	{
 		return;
 	}
@@ -127,13 +127,13 @@ void ABaseWeapon::Multi_FireWeaponCallback_Implementation()
 		Character->DoRecoil();
 	}
 	USkeletalMeshComponent* SkelMesh = Character->GetMesh1P();
-	if (SkelMesh == nullptr || SkelMesh->DoesSocketExist(FName("tip")) == false)
+	if (IsValid(SkelMesh) == false || SkelMesh->DoesSocketExist(FName("tip")) == false)
 	{
 		return;
 	}
 
 	UStaticMeshComponent* TipComponent = GetStaticMeshComponent();
-	if (TipComponent == nullptr || TipComponent->DoesSocketExist(FName("tip")) == false)
+	if (IsValid(TipComponent) == false || TipComponent->DoesSocketExist(FName("tip")) == false)
 	{
 		return;
 	}
@@ -430,7 +430,7 @@ void ABaseWeapon::OnRep_Character()
 
 void ABaseWeapon::SetAttackCooltime(UAnimMontage* PlayedAnimMontage)
 {
-	if (PlayedAnimMontage == nullptr)
+	if (IsValid(PlayedAnimMontage) == false)
 	{
 		return;
 	}
@@ -456,13 +456,13 @@ void ABaseWeapon::SetCharacter(AKillingFloorLikeCharacter* TargetCharacter)
 void ABaseWeapon::AttachWeaponToCharacter(AKillingFloorLikeCharacter* TargetCharacter)
 {
 	//이미 소유자가 있는 무기
-	if (Character != nullptr)
+	if (IsValid(Character))
 	{
 		return;
 	}
 
 	//이미 있는 무기 유형
-	if (TargetCharacter->GetWeapon(this->GetWeaponType()) != nullptr)
+	if (IsValid(TargetCharacter->GetWeapon(this->GetWeaponType())))
 	{
 		return;
 	}
@@ -479,7 +479,7 @@ void ABaseWeapon::AttachWeaponToCharacter(AKillingFloorLikeCharacter* TargetChar
 
 void ABaseWeapon::DropWeapon(AKillingFloorLikeCharacter* TargetCharacter)
 {
-	if (Character == nullptr)
+	if (IsValid(Character) == false)
 	{
 		return;
 	}
@@ -526,7 +526,7 @@ void ABaseWeapon::Server_RequestFire_Implementation(ETriggerEvent TriggerEvent)
 	{
 		UAnimMontage* FireAnimMontage = GetWeaponMontage(EWeaponAnimationType::Fire);
 		// FireAnimMontage가 null일 경우에 대한 처리는 GetWeaponMontage 내부 또는 여기서 수행할 수 있습니다.
-		if (FireAnimMontage == nullptr)
+		if (IsValid(FireAnimMontage) == false)
 		{
 			// 애니메이션 없이 바로 발사 로직을 실행하거나, 아무것도 하지 않을 수 있습니다.
 			// 여기서는 기존 로직과 동일하게 return합니다.
@@ -534,7 +534,7 @@ void ABaseWeapon::Server_RequestFire_Implementation(ETriggerEvent TriggerEvent)
 		}
 
 		UAnimMontage* PlayerFireAnimMontage = GetPlayerAnimation(EWeaponAnimationType::Fire, false);
-		if (PlayerFireAnimMontage == nullptr)
+		if (IsValid(PlayerFireAnimMontage) == false)
 		{
 			return;
 		}
@@ -552,7 +552,7 @@ void ABaseWeapon::Server_RequestFire_Implementation(ETriggerEvent TriggerEvent)
 
 UAnimMontage* ABaseWeapon::GetWeaponMontage(EWeaponAnimationType AnimationType)
 {
-	if (Character == nullptr)
+	if (IsValid(Character) == false)
 	{
 		return nullptr;
 	}

@@ -150,7 +150,7 @@ void UShopWidget::UpdateWaveText()
 {
 	AKillingFloorLikeGameState* GameState = Cast<
 		AKillingFloorLikeGameState>(UGameplayStatics::GetGameState(GetWorld()));
-	if (GameState == nullptr)
+	if (IsValid(GameState) == false)
 	{
 		return;
 	}
@@ -253,7 +253,7 @@ void UShopWidget::OnExit()
 
 void UShopWidget::SellWeapon()
 {
-	if (SelectedShopPlayerWidget == nullptr || SelectedShopPlayerWidget->GetWeapon() == nullptr)
+	if (IsValid(SelectedShopPlayerWidget) == false || IsValid(SelectedShopPlayerWidget->GetWeapon()) == false)
 	{
 		return;
 	}
@@ -305,20 +305,20 @@ void UShopWidget::RefreshPlayerWeapon()
 		GetShopPlayerWeaponArray()[i]->SetVisibility(ESlateVisibility::Collapsed);
 	}
 
-	if (SelectedShopPlayerWidget != nullptr)
+	if (IsValid(SelectedShopPlayerWidget))
 	{
 		SelectedShopPlayerWidget->WeaponCheckBox->SetCheckedState(ECheckBoxState::Unchecked);
 		SelectedShopPlayerWidget = nullptr;
 	}
 
 	ABaseWeapon* Knife = GetPlayerCharacterController()->GetKfCharacter()->GetWeapon(EWeaponType::Knife);
-	if (Knife != nullptr)
+	if (IsValid(Knife))
 	{
 		KnifeWeaponWidget->Refresh(Knife, this);
 	}
 
 	ABaseWeapon* Grenade = GetPlayerCharacterController()->GetKfCharacter()->GetWeapon(EWeaponType::Grenade);
-	if (Grenade != nullptr)
+	if (IsValid(Grenade))
 	{
 		GrenadesWeaponWidget->Refresh(Grenade, this);
 	}
@@ -329,7 +329,7 @@ void UShopWidget::RefreshPlayerWeapon()
 
 void UShopWidget::PlayerWeaponBtnClick(UShopPlayerWeaponWidget* ClickedShopPlayerWeaponWidget)
 {
-	if (ClickedShopPlayerWeaponWidget == nullptr)
+	if (IsValid(ClickedShopPlayerWeaponWidget) == false)
 	{
 		return;
 	}
@@ -340,7 +340,7 @@ void UShopWidget::PlayerWeaponBtnClick(UShopPlayerWeaponWidget* ClickedShopPlaye
 	}
 	else
 	{
-		if (SelectedShopPlayerWidget != nullptr)
+		if (IsValid(SelectedShopPlayerWidget))
 		{
 			SelectedShopPlayerWidget->WeaponCheckBox->SetCheckedState(ECheckBoxState::Unchecked);
 		}
@@ -352,13 +352,13 @@ void UShopWidget::PlayerWeaponBtnClick(UShopPlayerWeaponWidget* ClickedShopPlaye
 
 void UShopWidget::UpdatePlayerWeaponImage()
 {
-	if (SelectedShopPlayerWidget == nullptr)
+	if (IsValid(SelectedShopPlayerWidget) == false)
 	{
 		return;
 	}
 	UResourceManager* ResourceManager = GetGameInstance()->GetSubsystem<UResourceManager>();
 	
-	if (ResourceManager == nullptr)
+	if (IsValid(ResourceManager) == false)
 	{
 		return;
 	}
@@ -367,7 +367,7 @@ void UShopWidget::UpdatePlayerWeaponImage()
 	UTexture2D* ImageTexture = ResourceManager->LoadWeaponImageTexture(
 		WeaponData.id);
 
-	if (ImageTexture == nullptr)
+	if (IsValid(ImageTexture) == false)
 	{
 		return;
 	}
@@ -402,7 +402,7 @@ void UShopWidget::RefreshPurchaseWeapon(FGameplayTag Channel, const FGameplayMes
 void UShopWidget::RefreshPurchaseWeapon()
 {
 	UKFLikeGameInstance* KFGameInstance = Cast<UKFLikeGameInstance>(GetGameInstance());
-	if (KFGameInstance == nullptr)
+	if (IsValid(KFGameInstance) == false)
 	{
 		return;
 	}
@@ -440,7 +440,7 @@ void UShopWidget::RefreshPurchaseWeapon()
 		GetShopPurchaseWeaponArray()[i]->SetVisibility(ESlateVisibility::Collapsed);
 	}
 
-	if (SelectedShopPurchaseWidget != nullptr)
+	if (IsValid(SelectedShopPurchaseWidget))
 	{
 		SelectedShopPurchaseWidget->WeaponCheckBox->SetCheckedState(ECheckBoxState::Unchecked);
 		SelectedShopPurchaseWidget = nullptr;
@@ -449,7 +449,7 @@ void UShopWidget::RefreshPurchaseWeapon()
 
 void UShopWidget::PurchaseWeaponBtnClickEvent(UShopPurchaseWeaponWidget* ClickedShopPurchaseWeaponWidget)
 {
-	if (ClickedShopPurchaseWeaponWidget == nullptr)
+	if (IsValid(ClickedShopPurchaseWeaponWidget) == false)
 	{
 		return;
 	}
@@ -460,7 +460,7 @@ void UShopWidget::PurchaseWeaponBtnClickEvent(UShopPurchaseWeaponWidget* Clicked
 	}
 	else
 	{
-		if (SelectedShopPurchaseWidget != nullptr)
+		if (IsValid(SelectedShopPurchaseWidget))
 		{
 			SelectedShopPurchaseWidget->WeaponCheckBox->SetCheckedState(ECheckBoxState::Unchecked);
 		}
@@ -472,13 +472,13 @@ void UShopWidget::PurchaseWeaponBtnClickEvent(UShopPurchaseWeaponWidget* Clicked
 
 void UShopWidget::UpdatePurchaseWeaponImage()
 {
-	if (SelectedShopPurchaseWidget == nullptr)
+	if (IsValid(SelectedShopPurchaseWidget) == false)
 	{
 		return;
 	}
 	UResourceManager* ResourceManager = GetGameInstance()->GetSubsystem<UResourceManager>();
 	
-	if (ResourceManager == nullptr)
+	if (IsValid(ResourceManager) == false)
 	{
 		return;
 	}
@@ -486,7 +486,7 @@ void UShopWidget::UpdatePurchaseWeaponImage()
 	UTexture2D* ImageTexture = ResourceManager->LoadWeaponImageTexture(
 		SelectedShopPurchaseWidget->GetWeaponData().id);
 
-	if (ImageTexture == nullptr)
+	if (IsValid(ImageTexture) == false)
 	{
 		return;
 	}
@@ -502,7 +502,7 @@ void UShopWidget::UpdatePurchaseWeaponImage()
 
 void UShopWidget::PurchaseWeapon()
 {
-	if (SelectedShopPurchaseWidget == nullptr)
+	if (IsValid(SelectedShopPurchaseWidget) == false)
 	{
 		return;
 	}

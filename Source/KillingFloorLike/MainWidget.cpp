@@ -93,14 +93,14 @@ void UMainWidget::SetUp()
 	AddToViewport();
 
 	UWorld* World = GetWorld();
-	if (World == nullptr)
+	if (IsValid(World) == false)
 	{
 		return;
 	}
 
 
 	APlayerController* PlayerController = World->GetFirstPlayerController();
-	if (PlayerController == nullptr)
+	if (IsValid(PlayerController) == false)
 	{
 		return;
 	}
@@ -118,12 +118,12 @@ void UMainWidget::Teardown()
 	RemoveFromParent();
 
 	UWorld* World = GetWorld();
-	if (World == nullptr)
+	if (IsValid(World) == false)
 	{
 		return;
 	}
 	APlayerController* PlayerController = World->GetFirstPlayerController();
-	if (PlayerController == nullptr)
+	if (IsValid(PlayerController) == false)
 	{
 		return;
 	}

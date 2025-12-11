@@ -105,7 +105,7 @@ void AKillingFloorLikeProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* Ot
 	// 캐릭터를 맞춘 경우는 OnOverlapBegin에서 이미 처리하고 있으므로,
 	// 여기서는 캐릭터가 아닌 다른 오브젝트(벽, 바닥 등)에 부딪혔을 때만 처리합니다.
 	// 이렇게 하면 캐릭터 관통 로직과 충돌하지 않습니다.
-	if (Cast<ABaseCharacter>(OtherActor) == nullptr)
+	if (IsValid(Cast<ABaseCharacter>(OtherActor)) == false)
 	{
 		// 부딪힌 대상이 캐릭터가 아니면, 즉시 풀로 돌아갑니다.
 		UE_LOG(LogTemp, Log, TEXT("Projectile %s blocked by %s. Returning to pool."), *GetName(), *GetNameSafe(OtherActor));
@@ -126,7 +126,7 @@ void AKillingFloorLikeProjectile::OnOverlapBegin(UPrimitiveComponent* Overlapped
 	
 	ABaseCharacter* ShooterInstigator = Cast<ABaseCharacter>(GetInstigator());
 	ABaseCharacter* OtherCharacter = Cast<ABaseCharacter>(OtherActor);
-	if (ShooterInstigator == nullptr || OtherCharacter == nullptr)
+	if (IsValid(ShooterInstigator) == false || IsValid(OtherCharacter) == false)
 	{
 		return;
 	}

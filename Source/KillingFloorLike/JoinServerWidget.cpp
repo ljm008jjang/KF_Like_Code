@@ -12,7 +12,7 @@
 UJoinServerWidget::UJoinServerWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	ConstructorHelpers::FClassFinder<UUserWidget> ServerRowBPClass(TEXT("/Game/UI/WB_ServerRow"));
-	if (ServerRowBPClass.Class == nullptr)
+	if (IsValid(ServerRowBPClass.Class) == false)
 	{
 		return;
 	}
@@ -43,7 +43,7 @@ void UJoinServerWidget::SelectIndex(uint32 Index)
 void UJoinServerWidget::SetServerList(TArray<FServerData> Servers)
 {
 	UWorld* World = GetWorld();
-	if (World == nullptr)
+	if (IsValid(World) == false)
 	{
 		return;
 	}
@@ -54,7 +54,7 @@ void UJoinServerWidget::SetServerList(TArray<FServerData> Servers)
 	for (const FServerData& ServerData : Servers)
 	{
 		UServerRowWidget* Row = CreateWidget<UServerRowWidget>(World, ServerRowClass);
-		if (Row == nullptr)
+		if (IsValid(Row) == false)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Row is null"));
 			return;
@@ -81,7 +81,7 @@ void UJoinServerWidget::UpdateChildren()
 
 	{
 		UServerRowWidget* Row = Cast<UServerRowWidget>(ServerList->GetChildAt(i));
-		if (Row == nullptr)
+		if (IsValid(Row) == false)
 		{
 			continue;
 		}

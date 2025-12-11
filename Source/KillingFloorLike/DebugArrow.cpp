@@ -34,7 +34,7 @@ void ADebugArrow::Tick(float DeltaTime)
 
 	// 초기화가 되지 않았거나, 필수 객체들이 유효하지 않으면 아무것도 하지 않습니다.
 	// 컨트롤러와 다른 필수 객체들이 유효한지 항상 확인합니다.
-	if (OwningController == nullptr || ShopManager == nullptr || ShopManager->GetCurrentShop() == nullptr)
+	if (IsValid(OwningController) == false || IsValid(ShopManager) == false || IsValid(ShopManager->GetCurrentShop()) == false)
 	{
 		return;
 	}

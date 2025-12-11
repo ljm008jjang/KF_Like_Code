@@ -44,11 +44,11 @@ AActor* AShopManager::GetCurrentShop() const
 
 FText AShopManager::GetShopDistText()
 {
-	if (Character == nullptr)
+	if (IsValid(Character) == false)
 	{
 		Character = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	}
-	if (CurrentShop == nullptr || Character == nullptr)
+	if (IsValid(CurrentShop) == false || IsValid(Character) == false)
 	{
 		return FText::FromString("Trader: ??m");
 	}

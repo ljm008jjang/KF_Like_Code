@@ -22,20 +22,20 @@ void UObjectPoolManager::Deinitialize()
 
 UObjectPoolManager* UObjectPoolManager::GetObjectPoolManager(UObject* WorldContextObject)
 {
-	if (!WorldContextObject) return nullptr;
+	if (IsValid(WorldContextObject) == false) return nullptr;
 
 	UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(WorldContextObject);
-	if (!GameInstance) return nullptr;
+	if (IsValid(GameInstance) == false) return nullptr;
 
 	return GameInstance->GetSubsystem<UObjectPoolManager>();
 }
 
 void UObjectPoolManager::InitializePool(const TSubclassOf<AActor>& ActorClass, const int32 InitialSize)
 {
-	if (!ActorClass) return;
+	if (IsValid(ActorClass) == false) return;
 
 	UWorld* World = GetWorld();
-	if (!World) return;
+	if (IsValid(World) == false) return;
 
 	FActorPoolList& Pool = PoolMap.FindOrAdd(ActorClass);
 
@@ -67,12 +67,12 @@ AActor* UObjectPoolManager::GetFromPoolBP(UObject* WorldContextObject, const TSu
 AActor* UObjectPoolManager::GetFromPool(UWorld* World, const TSubclassOf<AActor>& ActorClass, const FVector& Location,
                                         const FRotator& Rotation, const FActorSpawnParameters& ActorSpawnParams)
 {
-	if (!ActorClass) return nullptr;
+	if (IsValid(ActorClass) == false) return nullptr;
 
 	// GetFromPool은 서버에서만 호출되어야 합니다.
 	// 참고: GameInstanceSubsystem은 서버와 클라이언트에 각각 존재하므로,
 	// 이 풀은 서버의 풀이며 클라이언트의 풀과는 동기화되지 않습니다.
-	if (!World)
+	if (IsValid(World) == false)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("GetFromPool should only be called on the server!"));
 		return nullptr;
@@ -136,7 +136,7 @@ void UObjectPoolManager::ReturnToPool(AActor* Actor)
 void UObjectPoolManager::ReturnToPoolAfterDelay(AActor* Actor, FTimerHandle* TimerHandle, const float Delay)
 {
 	// 타이머를 설정하기 전에 액터와 월드가 유효한지 확인합니다.
-	if (!Actor || !Actor->GetWorld()) return;
+	if (IsValid(Actor) == false || !Actor->GetWorld()) return;
 
 	// 참고: 타이머 핸들을 포인터로 전달하는 것은 일반적이지 않으며, 호출자가 핸들의 생명주기를 책임져야 합니다.
 	Actor->GetWorld()->GetTimerManager().SetTimer(*TimerHandle,

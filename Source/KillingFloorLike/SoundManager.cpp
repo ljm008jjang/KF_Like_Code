@@ -5,14 +5,15 @@
 
 #include "BaseCharacter.h"
 #include "SoundManagerActor.h"
+#include "GameFramework/GameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 
 USoundManager* USoundManager::GetSoundManager(UObject* WorldContextObject)
 {
-	if (!WorldContextObject) return nullptr;
+	if (IsValid(WorldContextObject) == false) return nullptr;
 
 	UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(WorldContextObject);
-	if (!GameInstance) return nullptr;
+	if (IsValid(GameInstance) == false) return nullptr;
 
 	return GameInstance->GetSubsystem<USoundManager>();
 }
@@ -40,7 +41,7 @@ void USoundManager::Play2DSound(USoundBase* Sound)
 void USoundManager::Multi_Play3DSound(USoundBase* Sound, FVector Location)
 {
 	UWorld* World = GetWorld();
-	if (World == nullptr || World->GetAuthGameMode() == nullptr)
+	if (IsValid(World) == false || IsValid(World->GetAuthGameMode()) == false)
 	{
 		return;
 	}
@@ -70,7 +71,7 @@ void USoundManager::Server_Stop3DSoundAttached_Implementation(ABaseCharacter* Ch
 void USoundManager::Multi_ChangeBGM(const FString& AssetPath)
 {
 	UWorld* World = GetWorld();
-	if (World == nullptr || World->GetAuthGameMode() == nullptr)
+	if (IsValid(World) == false || IsValid(World->GetAuthGameMode()) == false)
 	{
 		return;
 	}

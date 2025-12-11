@@ -30,19 +30,19 @@ void UGrenadeShootingComponent::BeginPlay()
 
 bool UGrenadeShootingComponent::Fire(AKillingFloorLikeCharacter* Character, FWeaponData* WeaponData, bool IsSpecial)
 {
-	if (Character == nullptr || WeaponData == nullptr)
+	if (IsValid(Character) == false || WeaponData == nullptr)
 	{
 		return false;
 	}
 
 	UWorld* World = GetWorld();
-	if (World == nullptr)
+	if (IsValid(World) == false)
 	{
 		return false;
 	}
 
 	// 스폰할 수류탄 클래스가 설정되었는지 확인합니다.
-	if (GrenadeClass == nullptr)
+	if (IsValid(GrenadeClass) == false)
 	{
 		UE_LOG(LogTemp, Error, TEXT("GrenadeClass is not set in %s! Please set it in the owning weapon's blueprint."),
 		       *GetName());
@@ -50,7 +50,7 @@ bool UGrenadeShootingComponent::Fire(AKillingFloorLikeCharacter* Character, FWea
 	}
 
 	APlayerController* PlayerController = Cast<APlayerController>(Character->GetController());
-	if (PlayerController == nullptr)
+	if (IsValid(PlayerController) == false)
 	{
 		return false;
 	}
@@ -69,10 +69,10 @@ bool UGrenadeShootingComponent::Fire(AKillingFloorLikeCharacter* Character, FWea
 
 	// 오브젝트 풀에서 수류탄 가져오기
 	UKFLikeGameInstance* GameInstance = GetWorld()->GetGameInstance<UKFLikeGameInstance>();
-	if (GameInstance == nullptr) return false;
+	if (IsValid(GameInstance) == false) return false;
 
 	UObjectPoolManager* PoolManager = GameInstance->GetSubsystem<UObjectPoolManager>();
-	if (PoolManager == nullptr) return false;
+	if (IsValid(PoolManager) == false) return false;
 
 	AGrenadeWeapon* GrenadeObject = PoolManager->GetFromPoolTemplate<AGrenadeWeapon>(
 		GetWorld(), GrenadeClass, SpawnLocation, SpawnRotation,

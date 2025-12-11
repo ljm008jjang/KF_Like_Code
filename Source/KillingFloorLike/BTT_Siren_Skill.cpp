@@ -17,7 +17,7 @@ EBTNodeResult::Type UBTT_Siren_Skill::ExecuteTask(UBehaviorTreeComponent& OwnerC
 
 	AMonsterAIController* AIController = Cast<AMonsterAIController>(OwnerComp.GetAIOwner());
 
-	if (AIController == nullptr)
+	if (IsValid(AIController) == false)
 	{
 		return EBTNodeResult::Failed;
 	}
@@ -28,7 +28,7 @@ EBTNodeResult::Type UBTT_Siren_Skill::ExecuteTask(UBehaviorTreeComponent& OwnerC
 	}
 
 	AMonster* ControlledPawn = Cast<AMonster>(AIController->GetPawn());
-	if (ControlledPawn == nullptr)
+	if (IsValid(ControlledPawn) == false)
 	{
 		return EBTNodeResult::Failed;
 	}

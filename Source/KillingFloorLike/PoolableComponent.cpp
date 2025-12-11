@@ -28,7 +28,7 @@ void UPoolableComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 void UPoolableComponent::OnRep_IsPooling()
 {
 	AActor* Owner = GetOwner();
-	if (!Owner) return;
+	if (IsValid(Owner) == false) return;
 	if (IsPooling == false)
 	{
 		// '비활성화' 이벤트를 구독한 모든 함수를 호출합니다.

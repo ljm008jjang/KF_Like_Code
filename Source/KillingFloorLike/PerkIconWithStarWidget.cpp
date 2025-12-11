@@ -56,7 +56,7 @@ void UPerkIconWithStarWidget::SetPerk(FGameplayTag Channel, const FGameplayMessa
 void UPerkIconWithStarWidget::SetPerk(const FPerkData& PerkData)
 {
 	UKFLikeGameInstance* KFLikeGameInstance = Cast<UKFLikeGameInstance>(GetGameInstance());
-	if (KFLikeGameInstance == nullptr)
+	if (IsValid(KFLikeGameInstance) == false)
 	{
 		return;
 	}

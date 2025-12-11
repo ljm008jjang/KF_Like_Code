@@ -62,7 +62,7 @@ void AMonsterAIController::Tick(float DeltaSeconds)
 
 void AMonsterAIController::SetActorRotation(float DeltaSeconds)
 {
-	if (Blackboard == nullptr)
+	if (IsValid(Blackboard) == false)
 	{
 		return;
 	}
@@ -73,7 +73,7 @@ void AMonsterAIController::SetActorRotation(float DeltaSeconds)
 
 	AKillingFloorLikeCharacter* Target = Cast<
 		AKillingFloorLikeCharacter>(Blackboard->GetValueAsObject(FName("Player")));
-	if (Target == nullptr)
+	if (IsValid(Target) == false)
 	{
 		return;
 	}

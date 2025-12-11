@@ -49,7 +49,7 @@ private:
 	class UKFLikeGameInstance* KFLikeGameInstance; // 약한 참조 (소유하지 않음)
 	UKFLikeGameInstance* GetKFGameInstance()
 	{
-		if (KFLikeGameInstance == nullptr)
+		if (IsValid(KFLikeGameInstance) == false)
 		{
 			KFLikeGameInstance = Cast<UKFLikeGameInstance>(GetGameInstance());
 		}

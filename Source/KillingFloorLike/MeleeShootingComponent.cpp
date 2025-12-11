@@ -39,12 +39,12 @@ void UMeleeShootingComponent::TickComponent(float DeltaTime, ELevelTick TickType
 
 bool UMeleeShootingComponent::Fire(AKillingFloorLikeCharacter* Character, FWeaponData* WeaponData, bool IsSpecial)
 {
-	if (Character == nullptr){
+	if (IsValid(Character) == false){
 		return false;
 	}
 
 	APlayerController* PlayerController = Cast<APlayerController>(Character->GetInstigatorController());
-	if (!PlayerController)
+	if (IsValid(PlayerController) == false)
 	{
 		return false;
 	}
@@ -111,7 +111,7 @@ void UMeleeShootingComponent::FilterAndPrioritizeHits(const TArray<FHitResult>& 
 	for (const FHitResult& Result : RawHits)
 	{
 		ABaseCharacter* HitCharacter = Cast<ABaseCharacter>(Result.GetActor());
-		if (!HitCharacter) continue;
+		if (IsValid(HitCharacter) == false) continue;
 
 		FHitResult* ExistingHit = OutBestHitPerCharacter.Find(HitCharacter);
 

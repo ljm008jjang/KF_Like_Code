@@ -12,7 +12,7 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
 	APawn* PawnOwner = TryGetPawnOwner();
-	if (PawnOwner == nullptr)
+	if (IsValid(PawnOwner) == false)
 	{
 		return;
 	}
@@ -25,7 +25,7 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	///Calc Speed
 	UCharacterMovementComponent* MovementComponent = PawnOwner->FindComponentByClass<UCharacterMovementComponent>();
-	if (MovementComponent == nullptr)
+	if (IsValid(MovementComponent) == false)
 	{
 		return;
 	}

@@ -47,7 +47,7 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool GetIsDead()
 	{
-		if (Monster.Get() == nullptr)
+		if (Monster.IsValid() == false)
 		{
 			return false;
 		}
@@ -57,7 +57,7 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool GetIsNotDead()
 	{
-		if (Monster.Get() == nullptr)
+		if (Monster.IsValid() == false)
 		{
 			return false;
 		}

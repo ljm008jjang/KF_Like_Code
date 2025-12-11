@@ -11,10 +11,10 @@
 
 bool UPelletShootingComponent::Fire(AKillingFloorLikeCharacter* Character, FWeaponData* WeaponData, bool IsSpecial)
 {
-	if (ProjectileClass != nullptr)
+	if (IsValid(ProjectileClass))
 	{
 		UWorld* const World = GetWorld();
-		if (World != nullptr)
+		if (IsValid(World))
 		{
 			APlayerController* PlayerController = Cast<APlayerController>(Character->GetController());
 			FRotator SpawnRotation; // = PlayerController->PlayerCameraManager->GetCameraRotation();

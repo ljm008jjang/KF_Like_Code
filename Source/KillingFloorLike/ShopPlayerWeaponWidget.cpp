@@ -8,6 +8,7 @@
 #include "PubSubManager.h"
 #include "ConsumableWeapon.h"
 #include "BasicButtonWidget.h"
+#include "ShopWidget.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 
@@ -51,11 +52,11 @@ bool UShopPlayerWeaponWidget::Initialize()
 
 void UShopPlayerWeaponWidget::Refresh(ABaseWeapon* NewWeapon, UShopWidget* NewShopWidget)
 {
-	if (NewShopWidget != nullptr)
+	if (IsValid(NewShopWidget))
 	{
 		ShopWidget = NewShopWidget;
 	}
-	if (NewWeapon == nullptr)
+	if (IsValid(NewWeapon) == false)
 	{
 		SetVisibility(ESlateVisibility::Collapsed);
 		return;
@@ -88,7 +89,7 @@ void UShopPlayerWeaponWidget::UpdateAmmoText(FGameplayTag Channel, const FGamepl
 void UShopPlayerWeaponWidget::UpdateAmmoText()
 {
 	AConsumableWeapon* ConsumableWeapon = Cast<AConsumableWeapon>(Weapon);
-	if (ConsumableWeapon == nullptr)
+	if (IsValid(ConsumableWeapon) == false)
 	{
 		AmmoText->SetText(FText::GetEmpty());
 		return;
@@ -110,7 +111,7 @@ void UShopPlayerWeaponWidget::UpdateMoneyText(FGameplayTag Channel, const FGamep
 void UShopPlayerWeaponWidget::UpdateMoneyText()
 {
 	AConsumableWeapon* ConsumableWeapon = Cast<AConsumableWeapon>(Weapon);
-	if (ConsumableWeapon == nullptr)
+	if (IsValid(ConsumableWeapon) == false)
 	{
 		FillButton->Text->SetText(FText::GetEmpty());
 		return;
@@ -121,12 +122,12 @@ void UShopPlayerWeaponWidget::UpdateMoneyText()
 
 void UShopPlayerWeaponWidget::SetMagText()
 {
-	if (Weapon == nullptr)
+	if (IsValid(Weapon) == false)
 	{
 		return;
 	}
 	AConsumableWeapon* ConsumableWeapon = Cast<AConsumableWeapon>(Weapon);
-	if (ConsumableWeapon == nullptr)
+	if (IsValid(ConsumableWeapon) == false)
 	{
 		MagButton->Text->SetText(FText::GetEmpty());
 		return;

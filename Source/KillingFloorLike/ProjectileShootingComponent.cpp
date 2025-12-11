@@ -35,7 +35,7 @@ bool UProjectileShootingComponent::Fire(AKillingFloorLikeCharacter* Character, F
 {
 	// 1. 유효성 검사
 	UWorld* World = GetWorld();
-	if (!Character || !WeaponData || !ProjectileClass || !World)
+	if (IsValid(Character) == false || !WeaponData || IsValid(ProjectileClass) == false || IsValid(World) == false)
 	{
 		return false;
 	}
@@ -70,10 +70,10 @@ bool UProjectileShootingComponent::Fire(AKillingFloorLikeCharacter* Character, F
 
 bool UProjectileShootingComponent::GetFireStartProperties(const AKillingFloorLikeCharacter* Character, FVector& OutLocation, FRotator& OutRotation) const
 {
-	if (!Character) return false;
+	if (IsValid(Character) == false) return false;
 
 	const APlayerController* PlayerController = Cast<APlayerController>(Character->GetController());
-	if (!PlayerController) return false;
+	if (IsValid(PlayerController) == false) return false;
 
 	// 1. 발사 방향은 항상 카메라(플레이어 시점)를 기준으로 합니다.
 	PlayerController->GetPlayerViewPoint(OutLocation, OutRotation);
@@ -126,12 +126,12 @@ void UProjectileShootingComponent::SpawnAndInitializeProjectile(
 
 	// 오브젝트 풀에서 투사체를 가져옵니다.
 	UObjectPoolManager* PoolManager = UGameplayStatics::GetGameInstance(World)->GetSubsystem<UObjectPoolManager>();
-	if (!PoolManager) return;
+	if (IsValid(PoolManager) == false) return;
 
 	AKillingFloorLikeProjectile* Projectile = PoolManager->GetFromPoolTemplate<AKillingFloorLikeProjectile>(
 		World, ProjectileClass, SpawnLocation, AdjustedRotation, SpawnParams);
 
-	if (Projectile)
+	if (IsValid(Projectile))
 	{
 		// 투사체를 초기화합니다.
 		Projectile->Initialize(

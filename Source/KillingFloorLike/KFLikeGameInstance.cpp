@@ -20,21 +20,21 @@ class FAssetRegistryModule;
 UKFLikeGameInstance::UKFLikeGameInstance(const FObjectInitializer& ObjectInitializer): Super(ObjectInitializer)
 {
 	ConstructorHelpers::FClassFinder<UUserWidget> MenuBPClass(TEXT("/Game/UI/WB_Main"));
-	if (MenuBPClass.Class == nullptr)
+	if (IsValid(MenuBPClass.Class) == false)
 	{
 		return;
 	}
 	MenuClass = MenuBPClass.Class;
 
 	ConstructorHelpers::FClassFinder<UChooseMapWidget> ChooseMapBPClass(TEXT("/Game/UI/WB_ChooseMap"));
-	if (ChooseMapBPClass.Class == nullptr)
+	if (IsValid(ChooseMapBPClass.Class) == false)
 	{
 		return;
 	}
 	ChooseMapClass = ChooseMapBPClass.Class;
 
 	ConstructorHelpers::FClassFinder<UUserWidget> ExitBPClass(TEXT("/Game/UI/WB_Exit"));
-	if (ExitBPClass.Class == nullptr)
+	if (IsValid(ExitBPClass.Class) == false)
 	{
 		return;
 	}
@@ -218,21 +218,21 @@ const TArray<FMapData>* UKFLikeGameInstance::GetMapDataArray() const
 
 void UKFLikeGameInstance::ShowExitMenuUI(bool IsHard)
 {
-	if (ExitClass == nullptr)
+	if (IsValid(ExitClass) == false)
 	{
 		return;
 	}
-	if (ExitWidget == nullptr)
+	if (IsValid(ExitWidget) == false)
 	{
 		ExitWidget = CreateWidget<UUserWidget>(this, ExitClass);
-		if (ExitWidget == nullptr)
+		if (IsValid(ExitWidget) == false)
 		{
 			return;
 		}
 	}
 
 	APlayerController* PlayerController = GetFirstLocalPlayerController();
-	if (PlayerController == nullptr)
+	if (IsValid(PlayerController) == false)
 	{
 		return;
 	}
@@ -459,12 +459,12 @@ void UKFLikeGameInstance::SetMonsterClasses(const UDataTable* NewMonsterDataTabl
 
 void UKFLikeGameInstance::LoadMenuWidget()
 {
-	if (MenuClass == nullptr)
+	if (IsValid(MenuClass) == false)
 	{
 		return;
 	}
 	MainWidget = CreateWidget<UMainWidget>(this, MenuClass);
-	if (MainWidget == nullptr)
+	if (IsValid(MainWidget) == false)
 	{
 		return;
 	}
@@ -496,12 +496,12 @@ void UKFLikeGameInstance::Host(FOnlineSessionSettings* SessionSettings)
 
 void UKFLikeGameInstance::LoadChooseMapWidget()
 {
-	if (ChooseMapClass == nullptr)
+	if (IsValid(ChooseMapClass) == false)
 	{
 		return;
 	}
 	ChooseMapWidget = CreateWidget<UChooseMapWidget>(this, ChooseMapClass);
-	if (ChooseMapWidget == nullptr)
+	if (IsValid(ChooseMapWidget) == false)
 	{
 		return;
 	}
@@ -559,7 +559,7 @@ void UKFLikeGameInstance::Join(uint32 Index)
 		return;
 	}
 
-	if (MainWidget != nullptr)
+	if (IsValid(MainWidget))
 	{
 		MainWidget->Teardown();
 	}
@@ -580,7 +580,7 @@ void UKFLikeGameInstance::StartSession()
 void UKFLikeGameInstance::LoadMainMenu()
 {
 	APlayerController* PlayerController = GetFirstLocalPlayerController();
-	if (PlayerController == nullptr)
+	if (IsValid(PlayerController) == false)
 	{
 		return;
 	}
@@ -611,7 +611,7 @@ void UKFLikeGameInstance::OnCreateSessionComplete(FName SessionName, bool Succes
 
 
 	UEngine* Engine = GetEngine();
-	if (Engine == nullptr)
+	if (IsValid(Engine) == false)
 	{
 		return;
 	}
@@ -674,7 +674,7 @@ void UKFLikeGameInstance::OnUpdateSessionComplete(FName SessionName, bool Succes
 }
 void UKFLikeGameInstance::OnFindSessionComplete(bool Success)
 {
-	if (Success == false || SessionSearch.IsValid() == false || MainWidget == nullptr)
+	if (Success == false || SessionSearch.IsValid() == false || IsValid(MainWidget) == false)
 	{
 		return;
 	}
@@ -730,7 +730,7 @@ void UKFLikeGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessio
 		return;
 	}
 	UEngine* Engine = GetEngine();
-	if (Engine == nullptr)
+	if (IsValid(Engine) == false)
 	{
 		return;
 	}
@@ -738,7 +738,7 @@ void UKFLikeGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessio
 	Engine->AddOnScreenDebugMessage(0, 5, FColor::Green, FString::Printf(TEXT("Joining %s"), *Address));
 
 	APlayerController* PlayerController = GetFirstLocalPlayerController();
-	if (PlayerController == nullptr)
+	if (IsValid(PlayerController) == false)
 	{
 		return;
 	}
@@ -809,7 +809,7 @@ void UKFLikeGameInstance::CreateSession()
 void UKFLikeGameInstance::CheckGameModeAndExit(APlayerController* PlayerController) // 함수 이름은 원하는 대로 정할 수 있습니다.
 {
 	UWorld* World = GetWorld();
-	if (World == nullptr || PlayerController == nullptr)
+	if (IsValid(World) == false || IsValid(PlayerController) == false)
 	{
 		return;
 	}

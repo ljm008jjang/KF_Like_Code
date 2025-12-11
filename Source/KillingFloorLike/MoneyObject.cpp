@@ -62,7 +62,7 @@ void AMoneyObject::Tick(float DeltaTime)
 
 void AMoneyObject::PickUpMoney(AKillingFloorLikeCharacter* TargetCharacter)
 {
-	if (TargetCharacter == nullptr)
+	if (IsValid(TargetCharacter) == false)
 	{
 		return;
 	}

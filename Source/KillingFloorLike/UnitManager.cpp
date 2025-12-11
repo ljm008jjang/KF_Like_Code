@@ -194,7 +194,7 @@ void AUnitManager::SpawnMonster(EMonsterType SelectedMonster)
 		SpawnPoint->GetActorLocation(),
 		SpawnPoint->GetActorRotation(), params);
 
-	if (SpawnAnimal == nullptr)
+	if (IsValid(SpawnAnimal) == false)
 	{
 		return;
 	}

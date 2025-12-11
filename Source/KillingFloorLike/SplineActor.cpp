@@ -80,14 +80,14 @@ void ASplineActor::CreatePathTo()
  	const FVector GoalLocation = Shop->GetActorLocation();
  	
  	UNavigationSystemV1* NavSys = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld());
- 	if (!NavSys)
+ 	if (IsValid(NavSys) == false)
  	{
  		NiagaraEffect->Deactivate();
  		return;
  	}
  	
  	const UNavigationPath* Path = NavSys->FindPathToLocationSynchronously(GetWorld(), StartLocation, GoalLocation);
- 	if (!Path || !Path->IsValid() || Path->PathPoints.Num() == 0)
+ 	if (IsValid(Path) == false || !Path->IsValid() || Path->PathPoints.Num() == 0)
  	{
  		NiagaraEffect->Deactivate();
  		return;

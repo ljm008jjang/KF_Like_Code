@@ -5,6 +5,7 @@
 
 #include "BasicButtonWidget.h"
 #include "PubSubManager.h"
+#include "ShopWidget.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 
@@ -36,7 +37,7 @@ bool UShopArmorWidget::Initialize()
 
 void UShopArmorWidget::Refresh(UShopWidget* NewShopWidget)
 {
-	if (NewShopWidget != nullptr)
+	if (IsValid(NewShopWidget))
 	{
 		ShopWidget = NewShopWidget;
 	}

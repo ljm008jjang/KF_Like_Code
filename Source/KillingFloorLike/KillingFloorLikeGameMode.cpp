@@ -58,7 +58,7 @@ void AKillingFloorLikeGameMode::StartWave()
 
 	USoundManager* SoundManager = USoundManager::GetSoundManager(this);
 	// 3. 배경음 변경 (TODO: 향후 DB 또는 설정값으로 관리)
-	if (SoundManager != nullptr)
+	if (IsValid(SoundManager))
 	{
 		SoundManager->Multi_ChangeBGM(WaveBGMPath);
 	}
@@ -112,19 +112,18 @@ void AKillingFloorLikeGameMode::CheckWaveStateMonsterCount(FGameplayTag Channel,
 
 void AKillingFloorLikeGameMode::CheckWaveStatePlayerDead(FGameplayTag Channel, const FGameplayMessage_None& Message)
 {
+	if (IsValid(CachedGameState) == false)
+	{
+		return;
+	}
+	
 	if (CachedGameState->GetCurrentModeType() == EModeType::Wave)
 	{
-		// GameState가 유효한지 다시 한번 확인합니다.
-		if (!CachedGameState)
-		{
-			return;
-		}
-
 		// GameState의 PlayerArray를 순회하며 살아있는 플레이어가 있는지 확인합니다.
 		for (APlayerState* PlayerState : CachedGameState->PlayerArray)
 		{
 			AKillingFloorLikeCharacter* KFCharacter = Cast<AKillingFloorLikeCharacter>(PlayerState->GetPawn());
-			if (KFCharacter == nullptr)
+			if (IsValid(KFCharacter) == false)
 			{
 				continue;
 			}
@@ -174,13 +173,13 @@ void AKillingFloorLikeGameMode::StartBreak()
 		
 		for (APlayerState* PlayerState : CachedGameState->PlayerArray)
 		{
-			if (PlayerState == nullptr) continue;
+			if (IsValid(PlayerState) == false) continue;
 
 			APawn* CurrentPawn = PlayerState->GetPawn();
 			AKillingFloorLikeCharacter* KFCharacter = Cast<AKillingFloorLikeCharacter>(CurrentPawn);
 
 			// 플레이어가 폰을 가지고 있지 않거나, 캐릭터가 죽은 상태라면 리스폰시킵니다.
-			if (CurrentPawn == nullptr || (KFCharacter && KFCharacter->GetCurrentUnitState() == EUnitState::Dead))
+			if (IsValid(CurrentPawn) == false || (IsValid(KFCharacter) && KFCharacter->GetCurrentUnitState() == EUnitState::Dead))
 			{
 				if (AController* PlayerController = PlayerState->GetOwner<AController>())
 				{
@@ -265,14 +264,14 @@ void AKillingFloorLikeGameMode::ChangeBGM(const FString& AssetPath)
 void AKillingFloorLikeGameMode::SetAllPlayersChangablePerk(bool bCanChange)
 {
 	// GameState가 유효한지 먼저 확인합니다.
-	if (CachedGameState == nullptr)
+	if (IsValid(CachedGameState) == false)
 	{
 		return;
 	}
 	// GameState의 PlayerArray를 순회하며 모든 플레이어에게 접근합니다.
 	for (APlayerState* PlayerState : CachedGameState->PlayerArray)
 	{
-		if (PlayerState)
+		if (IsValid(PlayerState))
 		{
 			// PlayerState로부터 해당 플레이어가 조종하는 캐릭터(Pawn)를 가져옵니다.
 			AKillingFloorLikeCharacter* Character = Cast<AKillingFloorLikeCharacter>(PlayerState->GetPawn());

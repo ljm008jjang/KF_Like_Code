@@ -26,12 +26,12 @@ EBTNodeResult::Type UBTT_Monster_Skill::ExecuteTask(UBehaviorTreeComponent& Owne
 	// 1. 유효성 검사: 필요한 컴포넌트와 액터들이 유효한지 확인합니다.
 	AMonsterAIController* AIController = Cast<AMonsterAIController>(OwnerComp.GetAIOwner());
 	UBlackboardComponent* BlackboardComp = OwnerComp.GetBlackboardComponent();
-	if (AIController == nullptr)
+	if (IsValid(AIController) == false)
 	{
 		return EBTNodeResult::Failed;
 	}
 
-	if (BlackboardComp == nullptr)
+	if (IsValid(BlackboardComp) == false)
 	{
 		return EBTNodeResult::Failed;
 	}
@@ -50,14 +50,14 @@ EBTNodeResult::Type UBTT_Monster_Skill::ExecuteTask(UBehaviorTreeComponent& Owne
 	}
 
 	AMonster* ControlledPawn = Cast<AMonster>(AIController->GetPawn());
-	if (ControlledPawn == nullptr)
+	if (IsValid(ControlledPawn) == false)
 	{
 		return EBTNodeResult::Failed;
 	}
 
 	// 2. 애니메이션 몽타주 설정
 	UAnimMontage* SkillMontage = ControlledPawn->GetAnimationMontage(EMonsterAnimationType::Skill, 0);
-	if (SkillMontage == nullptr)
+	if (IsValid(SkillMontage) == false)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("UBTT_Monster_Skill: Skill montage is not found on monster %s."), *GetNameSafe(ControlledPawn));
 		return EBTNodeResult::Failed;
@@ -86,7 +86,7 @@ void UBTT_Monster_Skill::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted
 {
 	// 람다나 타이머에 의해 호출될 때 AIController가 이미 파괴되었을 수 있으므로, 항상 유효성을 먼저 검사합니다.
 	AMonsterAIController* AIController = AIControllerPtr.Get();
-	if (!AIController || !OwnerComp)
+	if (IsValid(AIController) == false || IsValid(OwnerComp) == false)
 	{
 		// OwnerComp가 유효하지 않으면 태스크를 종료할 수 없으므로, 그냥 반환합니다.
 		return;
