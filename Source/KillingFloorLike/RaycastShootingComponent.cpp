@@ -88,56 +88,60 @@ bool URaycastShootingComponent::GetTraceStartEnd(const AKillingFloorLikeCharacte
 
 void URaycastShootingComponent::FilterAndPrioritizeHits(const TArray<FHitResult>& RawHits, TArray<FHitResult>& OutFinalTargets) const
 {
-	TMap<ABaseCharacter*, FHitResult> BestHitPerCharacter;
+	TMap<TWeakObjectPtr<ABaseCharacter>, FHitResult> BestHitPerCharacter;
 	static const FName HeadBoneName = FName(TEXT("Head"));
 
-	// RawHits 배열은 거리순으로
 	for (const FHitResult& Hit : RawHits)
 	{
 		ABaseCharacter* HitCharacter = Cast<ABaseCharacter>(Hit.GetActor());
 
-		if (HitCharacter)
+		// [변경 2] IsValid로 명확하게 유효성 검사 (PendingKill 상태 등 체크)
+		if (IsValid(HitCharacter))
 		{
-			FHitResult* ExistingHit = BestHitPerCharacter.Find(HitCharacter);
+			// Key로 사용할 Weak Pointer 생성
+			TWeakObjectPtr<ABaseCharacter> WeakCharacter = HitCharacter;
+
+			FHitResult* ExistingHit = BestHitPerCharacter.Find(WeakCharacter);
+          
 			if (!ExistingHit)
 			{
-				// 이 캐릭터에 대한 첫 번째 유효타입니다.
-				BestHitPerCharacter.Add(HitCharacter, Hit);
+				// 첫 유효타 등록
+				BestHitPerCharacter.Add(WeakCharacter, Hit);
 			}
-			// 이미 몸을 맞췄는데, 더 뒤에 있는 헤드샷이 감지된 경우 헤드샷으로 교체합니다.
+			// 이미 타격 정보가 있지만, 현재 타격이 헤드샷이고 기존 타격이 헤드샷이 아닐 경우 교체
 			else if (Hit.BoneName == HeadBoneName && ExistingHit->BoneName != HeadBoneName)
 			{
-				BestHitPerCharacter[HitCharacter] = Hit;
+				// Key(WeakCharacter)를 통해 안전하게 접근하여 Value 업데이트
+				BestHitPerCharacter[WeakCharacter] = Hit;
 			}
 		}
 		else
 		{
-			// 캐릭터가 아닌 관통 불가능한 벽 같은 물체에 맞았습니다.
-			// 이 지점 뒤의 모든 타격은 무시합니다.
+			// 캐릭터가 아닌 물체(벽 등)에 맞았으므로 관통 로직 종료
 			break;
 		}
 	}
 
 	if (BestHitPerCharacter.Num() > 0)
 	{
-		// TMap에서 최종 타겟 목록을 TArray로 변환합니다.
+		// TMap의 Value들(FHitResult)만 추출하여 배열로 변환
+		// (GenerateValueArray는 내부적으로 유효한 Key-Value 쌍만 순회하므로 안전)
 		BestHitPerCharacter.GenerateValueArray(OutFinalTargets);
 
-		// 데미지 계산을 올바르게 하기 위해, 최종 타겟들을 다시 거리순으로 정렬합니다.
+		// 거리순 정렬
 		OutFinalTargets.Sort([](const FHitResult& A, const FHitResult& B)
 		{
-			return A.Distance < B.Distance;
+		   return A.Distance < B.Distance;
 		});
 	}
 }
-
 void URaycastShootingComponent::ApplyDamageWithPenetration(const TArray<FHitResult>& Targets, AKillingFloorLikeCharacter* Character, const FWeaponData* WeaponData, bool IsSpecial) const
 {
 	int32 HitCount = 0;
 	for (const FHitResult& HitInfo : Targets)
 	{
 		ABaseCharacter* HitTarget = Cast<ABaseCharacter>(HitInfo.GetActor());
-		if (!HitTarget || !Character->IsAttackableUnitType(HitTarget))
+		if (IsValid(HitTarget) == false || !Character->IsAttackableUnitType(HitTarget))
 		{
 			continue;
 		}
